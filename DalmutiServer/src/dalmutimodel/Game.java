@@ -5,6 +5,7 @@
  */
 package dalmutimodel;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -15,12 +16,40 @@ import java.util.UUID;
 public class Game {
     
     private String gameID;
+
+    public String getGameID() {
+        return gameID;
+    }
+
+    public Player getGameOwner() {
+        return gameOwner;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public int getRoomSize() {
+        return roomSize;
+    }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public ArrayList<Card> getCurrentPlay() {
+        return currentPlay;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
     private Player gameOwner;
     private ArrayList<Player> players;
     private int roomSize;
-    private int gameState;
+    private String gameState;
     private ArrayList<Card> currentPlay;
-    private Deck deck;
+    private transient Deck deck;
     
     public static final String ERROR_GAME_STARTED = "ERROR_GAME_STARTED";
     public static final String ERROR_ROOM_FULL = "ERROR_ROOM_FULL";
@@ -34,14 +63,14 @@ public class Game {
         this.players = new ArrayList<Player>();
         this.players.add(owner);
         this.roomSize = roomSize;
-        this.gameState = GameStates.NEW_GAME;
+        this.gameState = DalmutiValues.WAITING_PLAYERS;
         this.deck = new Deck();              
     } 
     
     public String addPlayer(Player player){
         int playerCount = this.players.size();
         
-        if(this.gameState!=GameStates.WAITING_PLAYERS)
+        if(!this.gameState.equalsIgnoreCase(DalmutiValues.WAITING_PLAYERS))
             return ERROR_GAME_STARTED;
         
         if(playerCount == this.roomSize)
@@ -51,7 +80,7 @@ public class Game {
             this.players.add(player);
         
         if(playerCount+1 < this.roomSize){
-            this.gameState = GameStates.GAME_START;
+            this.gameState = DalmutiValues.GAME_START;
             
             //TODO: Players draw a card
             //TODO: Split Deck
@@ -64,6 +93,14 @@ public class Game {
     public void startGame(){
         
     }
+    
+    
+    @Override
+    public String toString(){
+        Gson gson = new Gson();                            
+        return gson.toJson(this);
+    }
+    
     
     
                    

@@ -21,8 +21,8 @@ public class DalmutiServer {
             System.exit(1);
         }
  
-        //int portNumber = Integer.parseInt(args[0]);              
-        Server serv = new Server(4444);
+        int portNumber = Integer.parseInt(args[0]);              
+        Server serv = new Server(portNumber);
         serv.start();
     }
 
