@@ -7,6 +7,7 @@ package dalmutimodel;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import org.java_websocket.WebSocket;
 
 /**
  *
@@ -16,10 +17,20 @@ public class Player {
 
     private String playerID;
     private String playerName;
+    private transient WebSocket conn;
+
+    public WebSocket getConn() {
+        return conn;
+    }
+
+    public void setConn(WebSocket conn) {
+        this.conn = conn;
+    }
     
-    public Player(String playerName) {
+    public Player(String playerName, WebSocket conn) {
         this.playerID = UUID.randomUUID().toString();
         this.playerName = playerName;
+        this.conn = conn;
     }    
 
     public String getPlayerID() {

@@ -3,13 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Games.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Player.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/Server.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Game.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Card.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/Tester.java</file>
-            <file>file:/C:/Users/miguhern/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/DalmutiValues.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Player.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/Server.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/ClientMessage.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/DalmutiValues.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Card.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/DalmutiServer.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Deck.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/Tester.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutiserver/ServerValues.java</file>
+            <file>file:/C:/Users/Mike/Desktop/Dalmuti/DalmutiServer/src/dalmutimodel/Game.java</file>
         </group>
     </open-files>
 </project-private>

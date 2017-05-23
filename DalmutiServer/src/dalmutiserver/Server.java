@@ -5,7 +5,9 @@
  */
 package dalmutiserver;
 
+import com.google.gson.Gson;
 import dalmutimodel.Games;
+import dalmutimodel.Player;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +43,7 @@ public class Server extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from " + conn.getRemoteSocketAddress().toString() + "-" + message);
-        processMessage(message);
+        processMessage(conn,message);
     }
 
     @Override
@@ -56,11 +58,40 @@ public class Server extends WebSocketServer {
     }
     
     
-    private void processMessage(String message){
+    private void processMessage(WebSocket conn, String message ){
+        ClientMessage clientMessage;
+        
         if (message==null)
             return;
+        try{
+            Gson gson = new Gson();
+            clientMessage = gson.fromJson( message, ClientMessage.class ); 
+        }catch (Exception e){
+            System.out.println("Invalid Message from"+ conn.getRemoteSocketAddress().toString());
+            return;
+        }
         
+        if(clientMessage == null)
+            return ;
         
+        //get rooms
+        if(ServerValues.ACTION_GET_ROOMS.equalsIgnoreCase(clientMessage.getAction())){
+            conn.send(this.DalmutiGame.getRoomList());
+        }
+        
+        //Create room action
+        if(ServerValues.ACTION_CREATE_ROOM.equalsIgnoreCase(clientMessage.getAction())){         
+            String username = clientMessage.getData().get("username");
+            int roomSize = Integer.parseInt(clientMessage.getData().get("roomSize"));
+            this.DalmutiGame.addRoom(new Player(username, conn), roomSize);
+            this.sendToAll(this.DalmutiGame.getRoomList());
+        }
+    }
+    
+    private void sendToAll(String message) {
+        for(WebSocket ws: clients){
+            ws.send(message);
+        }
     }
 
 }

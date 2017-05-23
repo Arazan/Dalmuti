@@ -1,0 +1,48 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<div style="display:none" id="logInDialog" 
+     data-bind="ojComponent:{component: 'ojDialog', initialVisibility: 'show', cancelBehavior: 'none', dragAffordance: 'none', resizeBehavior: 'none', title: serverOnline()? 'Dalmuti':'Dalmuti (Server Offline)',
+             rootAttributes: { style: 'width: 40%;'}}">
+    <div class="oj-dialog-body">
+        <input id="userName" 
+               type="text"
+               data-bind="ojComponent: {component: 'ojInputText', placeholder: 'User Name', required: true, 
+                                  value: username,rootAttributes: {style:'max-width:20em'}}"/>
+
+        <select id="roomSelect" data-bind="ojComponent: {component: 'ojSelect',
+                                                    value: room,
+                                                    required: true,
+                                                    rootAttributes: {style:'max-width:20em'}}">
+            <!-- ko foreach: roomList -->
+            <option data-bind="value:gameID, text:gameOwner.playerName?gameOwner.playerName+'\'s Room':''"></option>
+            <!-- /ko -->
+        </select>
+    </div>
+    <div class="oj-dialog-footer oj-dialog-footer-separator oj-helper-clearfix">
+        <button id="joinButton" data-bind="ojComponent: {component: 'ojButton', label: 'Join'}, click: joinClick,"> </button>
+        <button id="createRoomButton" data-bind="ojComponent: {component: 'ojButton', label: 'Create Room'}, click: createClick,"> </button>
+    </div>
+</div>
+
+<div class="oj-flex">
+    <div class="oj-panel oj-flex-item" style="width: 100%">Dalmuti Online</div>
+    <div class="oj-panel oj-flex-item" style="width: 80%">
+        <h2>Your Hand</h2>
+    </div>
+    <div class="oj-panel oj-flex-item" style="width: 20%">
+        <div class="oj-flex">
+            <div class="oj-panel oj-flex-item" style="width: 100%">
+                <h4>Current Play</h4>
+            </div>
+            <div class="oj-panel oj-flex-item" style="width: 100%">
+                <h4>Players</h4>
+            </div>
+        </div>
+    </div>
+
+</div>

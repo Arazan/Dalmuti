@@ -5,6 +5,7 @@
  */
 package dalmutiserver;
 
+import com.google.gson.Gson;
 import dalmutimodel.Deck;
 import dalmutimodel.Games;
 import dalmutimodel.Player;
@@ -22,8 +23,8 @@ public class Tester {
         System.out.println("Start Test");
         
         Games games = new Games();
-        games.addRoom(new Player("Miguel Hernandez"), 5);
-        games.addRoom(new Player("Pablo Orbe"), 10);
+        games.addRoom(new Player("Miguel Hernandez",null), 5);
+        games.addRoom(new Player("Pablo Orbe",null), 10);
         
         
         System.out.println(games.getRoomCount());
@@ -31,8 +32,24 @@ public class Tester {
         System.out.println(games.getRoom(games.getRooms().get(1).getGameID()));
         
         
+        ClientMessage message = new ClientMessage();
+        
+        message.setUserId("USER");
+        message.setGameID("GAME");
+        message.setAction("ACTION");
+        //message.setData("DATA");
+        
+        System.out.println(message.toString());
         
         
+        Gson gson = new Gson();
+        ClientMessage b = gson.fromJson( "{\"userId\":\"USER\",\"gameID\":\"GAME\",\"action\":\"ACTION\",\"data\":{\"username\":\"apple\",\"roomSize\":\"orange\"}}", ClientMessage.class ); 
+        
+
+        //{"userId":"USER","gameID":"GAME","action":"ACTION","data":{"username":"apple","roomSize":"orange"}}
+        
+        
+        System.out.println(b.getData().get("username"));        
         System.out.println("End Test");
     }    
     
