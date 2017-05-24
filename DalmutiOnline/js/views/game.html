@@ -12,20 +12,41 @@ and open the template in the editor.
         <input id="userName" 
                type="text"
                data-bind="ojComponent: {component: 'ojInputText', placeholder: 'User Name', required: true, 
-                                  value: username,rootAttributes: {style:'max-width:20em'}}"/>
+                                  value: username,rootAttributes: {style:'max-width:15em'}}"/>
 
         <select id="roomSelect" data-bind="ojComponent: {component: 'ojSelect',
                                                     value: room,
                                                     required: true,
-                                                    rootAttributes: {style:'max-width:20em'}}">
+                                                    placeholder: 'Chose a Room',
+                                                    rootAttributes: {style:'max-width:15em'}}">
             <!-- ko foreach: roomList -->
-            <option data-bind="value:gameID, text:gameOwner.playerName?gameOwner.playerName+'\'s Room':''"></option>
+            <option data-bind="value:gameID, text:gameOwner.playerName?gameOwner.playerName+'\'s Room (' +players.length+'/'+roomSize+')'  : ''"></option>
             <!-- /ko -->
         </select>
+        <input id="roomSize"
+               data-bind="ojComponent: {
+        component: 'ojInputNumber', 
+        max:8,
+        min:4, 
+        step:1, 
+        placeholder: 'Room Size',
+        value:roomSize,
+        rootAttributes: {style:'max-width:10em'}}"/>        
     </div>
     <div class="oj-dialog-footer oj-dialog-footer-separator oj-helper-clearfix">
-        <button id="joinButton" data-bind="ojComponent: {component: 'ojButton', label: 'Join'}, click: joinClick,"> </button>
-        <button id="createRoomButton" data-bind="ojComponent: {component: 'ojButton', label: 'Create Room'}, click: createClick,"> </button>
+        <button id="joinButton" data-bind="ojComponent: {component: 'ojButton', label: 'Join', disabled: true}, click: joinClick"> </button>
+        <button id="createRoomButton" data-bind="ojComponent: {component: 'ojButton', label: 'Create Room', disabled: true}, click: createClick"> </button>
+    </div>
+</div>
+
+<div style="display:none" id="errorDialog" 
+     data-bind="ojComponent:{component: 'ojDialog', initialVisibility: 'hide', cancelBehavior: 'icon', dragAffordance: 'none', resizeBehavior: 'none', title: errorDialogTittle,
+             rootAttributes: { style: 'width: 35%;'}}">
+    <div class="oj-dialog-body">
+        <span data-bind="text: errorDialogMessage"></span>
+    </div>
+    <div class="oj-dialog-footer ">
+        <button id="okDialohButton" data-bind="ojComponent: {component: 'ojButton', label: 'Ok', disabled: false}, click: okDialogClick"> </button>
     </div>
 </div>
 

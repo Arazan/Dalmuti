@@ -7,7 +7,8 @@
 /**
  * game module
  */
-define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojdialog', 'ojs/ojinputtext', 'ojs/ojselectcombobox'
+define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojdialog', 'ojs/ojinputtext', 'ojs/ojselectcombobox',
+    'ojs/ojinputnumber'
 ], function (oj, ko, $) {
     /**
      * The view model for the main content view template
@@ -19,23 +20,52 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'o
         self.username = ko.observable();
         self.room = ko.observable();
         self.serverOnline = ko.observable(false);
+        self.roomSize = ko.observable();
+        self.errorDialogTittle = ko.observable();
+        self.errorDialogMessage = ko.observable();
         self.roomList = ko.observableArray([
             {gameID: '', gameOwner: ''}
         ]);
 
 
 
+
         self.joinClick = function (data, event) {
+            //Set Mandatory Fields            
+            $("#roomSize").ojInputNumber({required: false});
+            $("#roomSelect").ojSelect({required: true});
+
+
+            //Validate Fields
+            if (!self.validateInputs())
+                return true;
+
             console.log("Join Room");
+
             return true;
         };
 
         self.createClick = function (data, event) {
-            websocket.send('{"userId":"","gameID":"","action":"CREATE_ROOM","data":{"username":"Mike","roomSize":"10"}}');
+            //Set Mandatory Fields            
+            $("#roomSize").ojInputNumber({required: true});
+            $("#roomSelect").ojSelect({required: false});
 
+            //Validate Fields
+            if (!self.validateInputs())
+                return true;
+
+
+            console.log("Create Room");
+
+            //Create Room
             self.createRoom(self.username());
             return true;
         };
+        
+        self.okDialogClick = function(data,event){
+            $("#errorDialog").ojDialog("close");
+            return true;
+        }
 
 
         self.connectToServer = function () {
@@ -58,6 +88,12 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'o
         self.onOpen = function (evt) {
             console.log("Connected");
             self.serverOnline(true);
+
+            //Enable Buttons
+            $("#joinButton").ojButton("option", "disabled", false);
+            $("#createRoomButton").ojButton("option", "disabled", false);
+
+            //get Available rooms
             self.getRooms();
 
         };
@@ -68,21 +104,26 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'o
         };
 
         self.onMessage = function (evt) {
-            var payload;
             console.log("Message: " + evt.data);
-            payload = JSON.parse(evt.data);
-
-
-            console.log(payload.gameRooms);
-            self.roomList(payload.gameRooms);
-
-
-
+            self.processMessage(evt.data);
         };
 
         self.onError = function (evt) {
             console.log("ERROR: " + evt.data);
         };
+
+
+        self.validateInputs = function () {
+            var isUserNameValid = $("#userName").ojInputText('validate');
+            var isRoomSizeValid = $("#roomSize").ojInputNumber('validate');
+            var isRoomSelected = $("#roomSelect").ojSelect('validate');
+            if (isUserNameValid
+                    && isRoomSizeValid
+                    && isRoomSelected) {
+                return true;
+            }
+            return false;
+        }
 
 
         self.getRooms = function () {
@@ -96,7 +137,31 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojbutton', 'o
 
         self.createRoom = function (roomName) {
             console.log("Create Room: " + roomName);
+            websocket.send('{"userId":"","gameID":"","action":"CREATE_ROOM","data":{"username":"' + self.username() + '","roomSize":"' + self.roomSize() + '"}}');
             self.room(self.username());
+        }
+
+
+        self.processMessage = function (message) {
+            var payload;
+            payload = JSON.parse(message);
+
+            //If any error
+            if (payload.status == 'ERROR') {
+                console.log(payload.status + ":" + payload.message);
+                self.errorDialogTittle(payload.status);
+                self.errorDialogMessage(payload.message);
+                $("#errorDialog").ojDialog("open");
+                return;
+            }
+
+            //If get rooms
+            if (payload.action == 'GET_ROOMS') {
+                self.roomList(payload.data.gameRooms);
+            }
+
+
+
         }
 
 

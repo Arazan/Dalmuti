@@ -6,6 +6,7 @@
 package dalmutimodel;
 
 import com.google.gson.Gson;
+import dalmutiserver.ServerValues;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -51,11 +52,10 @@ public class Game {
     private ArrayList<Card> currentPlay;
     private transient Deck deck;
     
-    public static final String ERROR_GAME_STARTED = "ERROR_GAME_STARTED";
-    public static final String ERROR_ROOM_FULL = "ERROR_ROOM_FULL";
     
-    public static final String PLAYER_ADDED = "PLAYER_ADDED";
     
+    
+       
      
     public Game(Player owner, int roomSize){
         this.gameID = UUID.randomUUID().toString();
@@ -71,23 +71,26 @@ public class Game {
         int playerCount = this.players.size();
         
         if(!this.gameState.equalsIgnoreCase(DalmutiValues.WAITING_PLAYERS))
-            return ERROR_GAME_STARTED;
+            return ServerValues.ERROR_GAME_STARTED;
         
         if(playerCount == this.roomSize)
-            return ERROR_ROOM_FULL;
+            return ServerValues.ERROR_ROOM_FULL;
         
-        if(playerCount < this.roomSize)
+        if(playerCount < this.roomSize){
             this.players.add(player);
+            playerCount+=1;
+        }
         
-        if(playerCount+1 < this.roomSize){
+        if(playerCount == this.roomSize){
             this.gameState = DalmutiValues.GAME_START;
             
             //TODO: Players draw a card
             //TODO: Split Deck
+            return ServerValues.PLAYER_ADDED_GAME_READY;
             
         }
         
-        return PLAYER_ADDED;
+        return ServerValues.PLAYER_ADDED;
     }
     
     public void startGame(){
